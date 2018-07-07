@@ -13,4 +13,13 @@ store.dispatch = action => {
   }
 }
 
+const lastDispatch = store.dispatch
+store.dispatch = action => {
+  if (typeof action.then === 'function') {
+    action.then(lastDispatch)
+  } else {
+    lastDispatch(action)
+  }
+}
+
 export default () => store
