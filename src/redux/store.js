@@ -2,7 +2,7 @@ let rootReducer
 let storeState
 let rootListener
 
-const createStore = (reducer, preloadedState = {}) => {
+const createStore = (reducer, preloadedState = {}, enhancer) => {
   rootReducer = reducer
   storeState = preloadedState
 
@@ -14,7 +14,7 @@ const createStore = (reducer, preloadedState = {}) => {
 
   init()
 
-  return store
+  return enhancer(store)
 }
 
 const init = () => {
@@ -51,4 +51,16 @@ const combineReducers = reducers => {
   }
 }
 
-export { createStore, combineReducers }
+const applyMiddleware = (...middlewares) => {
+  return store => {
+    middlewares
+      .slice(0)
+      .reverse()
+      .forEach(middleware => {
+        store.dispatch = middleware(store)(store.dispatch)
+      })
+    return store
+  }
+}
+
+export { createStore, combineReducers, applyMiddleware }

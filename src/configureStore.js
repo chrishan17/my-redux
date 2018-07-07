@@ -1,25 +1,28 @@
-import { createStore } from './redux'
+import { createStore, applyMiddleware } from './redux'
 import rootReducers from './reducers/index'
 
-const store = createStore(rootReducers)
-
-const originDispatch = store.dispatch
-
-store.dispatch = action => {
+const thunkMiddleware = store => dispatch => action => {
   if (typeof action === 'function') {
-    action(originDispatch)
+    action(dispatch)
   } else {
-    originDispatch(action)
+    dispatch(action)
   }
 }
 
-const lastDispatch = store.dispatch
-store.dispatch = action => {
+const promiseMiddleware = store => dispatch => action => {
   if (typeof action.then === 'function') {
-    action.then(lastDispatch)
+    action.then(dispatch)
   } else {
-    lastDispatch(action)
+    dispatch(action)
   }
 }
+
+const preloadedState = {}
+
+const store = createStore(
+  rootReducers,
+  preloadedState,
+  applyMiddleware(thunkMiddleware, promiseMiddleware)
+)
 
 export default () => store

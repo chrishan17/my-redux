@@ -1,3 +1,3 @@
-import { createStore, combineReducers } from './store'
+import { createStore, combineReducers, applyMiddleware } from './store'
 
-export { createStore, combineReducers }
+export { createStore, combineReducers, applyMiddleware }
