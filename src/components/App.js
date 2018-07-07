@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 
 import Greeting from './Greeting'
+import PersonList from './PersonList'
 import configureStore from '../configureStore'
 import Context from '../Context'
 
@@ -19,6 +20,7 @@ export default class App extends Component {
       <div>
         <Provider value={store}>
           <Greeting />
+          <PersonList />
         </Provider>
       </div>
     )
